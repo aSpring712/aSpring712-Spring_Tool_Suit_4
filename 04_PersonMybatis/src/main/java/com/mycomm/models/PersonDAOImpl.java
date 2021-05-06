@@ -24,16 +24,17 @@ public class PersonDAOImpl implements PersonDAO {
 		return sqlMapper.selectOne(mid);
 	}
 	
+	// 추가
 	@Override
 	public void dao_insert(String mid, PersonVO person) {
 		sqlMapper.insert(mid, person);
 		
 	}
 
+	// 검색 전체보기
 	@Override
 	public List<PersonVO> dao_list(String mid, HashMap<String, String> hm) {
-		// TODO Auto-generated method stub
-		return null;
+		return sqlMapper.selectList(mid, hm); // mid 부르고 hm을 전달
 	}
 
 	// 상세보기
@@ -42,22 +43,24 @@ public class PersonDAOImpl implements PersonDAO {
 		return sqlMapper.selectOne(mid, id);
 	}
 
+	// 수정
 	@Override
 	public void dao_update(String mid, PersonVO person) {
-		// TODO Auto-generated method stub
+		sqlMapper.update(mid, person); // Mapper (Person.xml)로 이동
 		
 	}
 
+	// 삭제
 	@Override
 	public void dao_delete(String mid, String id) {
-		// TODO Auto-generated method stub
+		sqlMapper.delete(mid, id);
 		
 	}
-
+	
+	// 검색 후 개수
 	@Override
 	public int dao_count(String mid, HashMap<String, String> hm) {
-		// TODO Auto-generated method stub
-		return 0;
+		return sqlMapper.selectOne(mid, hm);
 	}
 
 }
