@@ -4,16 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface GuestDAO {
-	// Ãß°¡
+	// ì¶”ê°€
 	public void dao_guestInsert(GuestDTO guest);
-	// ÀüÃ¼º¸±â
+	// ì „ì²´ë³´ê¸°
 	public List<GuestDTO> dao_guestList(HashMap<String, String> hm);
-	// »ó¼¼º¸±â
+	// ìƒì„¸ë³´ê¸°
 	public GuestDTO dao_findByNum(int num);
-	// ¼öÁ¤
+	// ìˆ˜ì •
 	public void dao_guestUpdate(GuestDTO guest);
-	// »èÁ¦
+	// ì‚­ì œ
 	public void dao_guestDelete(int num);
-	// °³¼ö
+	// ê°œìˆ˜
 	public int dao_guestCount(HashMap<String, String> hm);
 }

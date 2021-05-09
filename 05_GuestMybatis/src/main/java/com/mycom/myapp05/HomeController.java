@@ -1,5 +1,6 @@
 package com.mycom.myapp05;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -10,23 +11,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myguest.model.GuestDTO;
+import com.myguest.model.GuestListVO;
 import com.myguest.model.GuestServiceImpl;
 
 /**
  * Handles requests for the application home page.
  */
-// @Getter, @Setter, @ToString µî...
-@Controller // getter, setter, »ı¼ºÀÚ, toString ´Ù ¾Ë¾Æ¼­ ¸¸µé¾îÁÜ(lombok)
+// @Getter, @Setter, @ToString ë“±...
+@Controller // getter, setter, ìƒì„±ì, toString ë‹¤ ì•Œì•„ì„œ ë§Œë“¤ì–´ì¤Œ(lombok)
 public class HomeController {
 	
-	@Resource(name="service") // -> @AutoWired È¤Àº @Resource ÇØ¼­ ¾Æ·¡ ¸Ş¼­µå¿¡¼­ »ç¿ëÇÒ service ¸¸µé±â -> import°¡ ¾ÈµÇ¸é maven repository¿¡¼­ annotation º¹»çÇØ¼­ dependency Ãß°¡ÇÏ±â
-	private GuestServiceImpl service; // ¾ÆÁ÷ bean ¸¸µé¾îÁÖÁö ¾Ê¾Æ¼­ ºó ²®µ¥±â
+	@Resource(name="service") // -> @AutoWired í˜¹ì€ @Resource í•´ì„œ ì•„ë˜ ë©”ì„œë“œì—ì„œ ì‚¬ìš©í•  service ë§Œë“¤ê¸° -> importê°€ ì•ˆë˜ë©´ maven repositoryì—ì„œ annotation ë³µì‚¬í•´ì„œ dependency ì¶”ê°€í•˜ê¸°
+	private GuestServiceImpl service; // ì•„ì§ bean ë§Œë“¤ì–´ì£¼ì§€ ì•Šì•„ì„œ ë¹ˆ ê»ë°ê¸°
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
@@ -38,19 +46,57 @@ public class HomeController {
 		return "insert";
 	}
 	
-	@PostMapping("gInsert") // insert.jsp¿¡¼­ ÀÔ·Â ¹öÆ° Å¬¸¯ ½Ã ÀÌÂÊÀ¸·Î ³Ñ¾î¿È
-	public void insert(GuestDTO guest, HttpServletRequest request) { // ipÁÖ¼Ò¸¦ ±¸ÇÏ±â À§ÇØ
-		guest.setIpaddr(request.getRemoteAddr()); // ipÁÖ¼Ò ÀÔ·Â
-		// ¼­ºñ½º ¸ÕÀú ºÎ¸£±â : ¼­ºñ½º ¸¸µé±â -> 25~26¹ø ÁÙ ÀÛ¼º
-		service.guestInsert(guest); // ¼­ºñ½º °¬´Ù°¡ -> DAO·Î °¨
+	@PostMapping("gInsert") // insert.jspì—ì„œ ì…ë ¥ ë²„íŠ¼ í´ë¦­ ì‹œ ì´ìª½ìœ¼ë¡œ ë„˜ì–´ì˜´
+	@ResponseBody // ì§„ì§œ ë¬¸ìì—´ì´ return ë¨
+	public String insert(@RequestBody GuestDTO guest, HttpServletRequest request) { // @RequestBody ë¥¼ ì ì–´ì¤˜ì•¼ json í˜•íƒœë¡œ ë°›ì„ ìˆ˜ ìˆìŒ
+		guest.setIpaddr(request.getRemoteAddr()); // ipì£¼ì†Œ ì…ë ¥
+		// ì„œë¹„ìŠ¤ ë¨¼ì € ë¶€ë¥´ê¸° : ì„œë¹„ìŠ¤ ë§Œë“¤ê¸° -> 25~26ë²ˆ ì¤„ ì‘ì„±
+		service.guestInsert(guest); // ì„œë¹„ìŠ¤ ê°”ë‹¤ê°€ -> DAOë¡œ ê°
+		return "success";
 	}
 	
 	@GetMapping("gList")
-	public String list(Model model) {
-		List<GuestDTO> guestlist = service.guestList(null);
-		model.addAttribute("guestlist", guestlist);
-		return "list";
+	@ResponseBody
+	public GuestListVO list(String field, String word) { // jsoní˜•íƒœë¡œ return ì‹œí‚¤ê¸° ë•Œë¬¸ì— Model í•„ìš”ì—†ìŒ
+		HashMap<String, String> hm = new HashMap<String, String>();
+		hm.put("field", field);
+		hm.put("word", word);
+		System.out.println(hm);
+		List<GuestDTO> guestlist = service.guestList(hm);
+		int count = service.guestCount(hm);
+		// return 1ê°œë§Œ ì‹œí‚¬ ìˆ˜ ìˆëŠ”ë° guestlist, countë¥¼ return í•´ì£¼ì–´ì•¼ í•¨ : ë‘ê°œë¥¼ í•˜ë‚˜ë¡œ ë¬¶ê¸° ìœ„í•´ -> GuestListVO.javaë§Œë“¤ê¸°
+		GuestListVO listvo = new GuestListVO(count, guestlist);
+		return listvo;
 	}
 	
+	// ìƒì„¸ë³´ê¸° : jackson ì‚¬ìš© -> íŒŒì‹±í•˜ì§€ì•Šê³  ì „ë‹¬ê°€ëŠ¥
+	@GetMapping("gView")
+	@ResponseBody // return ë˜ì–´ì§€ëŠ” guestëŠ” .jspê°€ ì•„ë‹ˆê¸° ë•Œë¬¸ì— ì ì–´ì¤Œ 
+	public GuestDTO view(@RequestParam(name="num", required = false) int num) { // num ì´ë¼ëŠ” ì´ë¦„ìœ¼ë¡œ ë„˜ì–´ì˜¤ëŠ” ê²ƒì„ int ë‹¤ë¥¸ ì´ë¦„ìœ¼ë¡œ ì“°ê² ë‹¤ í•˜ë©´ @RequestParamì„ ì¨ì£¼ë©´ ë¨(ë‹¨ì  : nullê°’ì´ ì˜¤ë©´ ì•ˆë¨! - required false í•´ì£¼ë©´ nullê°’ë„ ê°€ëŠ¥, ê¸°ë³¸ ê°’ì€ true)
+		GuestDTO guest = service.findByNum(num);
+		return guest;
+	}
+	
+//	@GetMapping("gView")
+//	@ResponseBody
+//	public String view(@RequestParam("num") int num) {
+//		GuestDTO guest = service.findByNum(num);
+//		JSONObject obj = new JSONObject();
+//		obj.put("num", guest.getNum());
+//		obj.put("name", guest.getName());
+//		obj.put("content", guest.getContent());
+//		obj.put("grade", guest.getGrade());
+//		obj.put("created", guest.getCreated());
+//		obj.put("ipaddr", guest.getIpaddr());
+//		return obj.toString(); // í˜¹ì€ toJSON
+//	}
+	
+	//ì‚­ì œ
+	@DeleteMapping("gDelete/{num}") // ë„˜ì–´ë…¸ëŠ” num ê°’ ë°›ì•„ì™€ì•¼ í•¨
+	@ResponseBody
+	public String delete(@PathVariable int num) { // ê²½ë¡œìƒì—ì„œ ê°’ì„ ë°›ì•„ì˜¤ëŠ” ì–´ë…¸í…Œì´ì…˜
+		service.guestDelete(num);
+		return "success";
+	}
 	
 }

@@ -5,6 +5,26 @@
  
  <!-- 이름 GuestMapper.java를 찾아감 -->
  <mapper namespace="com.myguest.mapper.GuestMapper">
+
+<sql id="search">
+	<where> <!-- Dynamic SQL -->
+		<if test="word != null and field=='name'">
+			name like CONCAT('%', #{word}, '%')
+		</if>
+		<if test="word != null and field=='content'">
+			content like CONCAT('%', #{word}, '%')
+		</if>
+	</where>
+</sql>
+
+ <!-- 전체보기 -->
+ <select id="list" parameterType="java.util.Map" resultType="com.myguest.model.GuestDTO">
+ 	select * from guest <include refid="search"/>
+ </select> 
  
+ <!-- 개수 -->
+ <select id="count" parameterType="java.util.Map" resultType="int">
+ 	select count(*) from guest <include refid="search"/> 
+ </select>
  
  </mapper>

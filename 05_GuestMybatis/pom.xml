@@ -63,6 +63,24 @@
 		    <version>1.18.12</version>
 		    <scope>provided</scope>
 		</dependency>
+
+		<!-- json-simple -->		
+		<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+		<dependency>
+		    <groupId>com.googlecode.json-simple</groupId>
+		    <artifactId>json-simple</artifactId>
+		    <version>1.1.1</version>
+		</dependency>
+		
+		
+		<!-- jackson-databind -->
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.11.3</version>
+		</dependency>
+		
 		
 		<!-- mysql connector 추가 -->
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->

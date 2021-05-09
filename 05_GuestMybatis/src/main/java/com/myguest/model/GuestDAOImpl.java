@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 
 import com.myguest.mapper.GuestMapper;
 
-@Repository("dao") // Repository¶ó´Â°É ¾Ë·ÁÁÖ±â
+@Repository("dao") // Repositoryë¼ëŠ”ê±¸ ì•Œë ¤ì£¼ê¸°
 public class GuestDAOImpl implements GuestDAO {
 	
 	@Autowired
-	public GuestMapper mapper; // ÀÚ¹Ù ÆÄÀÏ(GuestMapper.java ÀÎÅÍÆäÀÌ½º·Î) ¸¸µé¾î¾ß ÇÔ
+	public GuestMapper mapper; // ìë°” íŒŒì¼(GuestMapper.java ì¸í„°í˜ì´ìŠ¤ë¡œ) ë§Œë“¤ì–´ì•¼ í•¨
 
 	@Override
 	public void dao_guestInsert(GuestDTO guest) {
@@ -22,13 +22,12 @@ public class GuestDAOImpl implements GuestDAO {
 
 	@Override
 	public List<GuestDTO> dao_guestList(HashMap<String, String> hm) {
-		return mapper.list(hm); // mapper.java ÆÄÀÏÀ» ¸»ÇÏ´Âµ¥ list°¡ ¾ø¾î¼­ ¿À·ù
+		return mapper.list(hm); // mapper.java íŒŒì¼ì„ ë§í•˜ëŠ”ë° listê°€ ì—†ì–´ì„œ ì˜¤ë¥˜
 	}
 
 	@Override
 	public GuestDTO dao_findByNum(int num) {
-		// TODO Auto-generated method stub
-		return null;
+		return mapper.findByNum(num);
 	}
 
 	@Override
@@ -39,14 +38,13 @@ public class GuestDAOImpl implements GuestDAO {
 
 	@Override
 	public void dao_guestDelete(int num) {
-		// TODO Auto-generated method stub
+		mapper.delete(num);
 		
 	}
 
 	@Override
 	public int dao_guestCount(HashMap<String, String> hm) {
-		// TODO Auto-generated method stub
-		return 0;
+		return mapper.count(hm);
 	}
 
 }

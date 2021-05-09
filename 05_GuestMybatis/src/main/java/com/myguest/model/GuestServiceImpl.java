@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-@Service("service") // ¼­ºñ½º¶ó´Â °É ¾Ë·ÁÁà¾ß ÇÔ -> ¸®¼Ò½º´Â nameÀ¸·Î Á¢±Ù
+@Service("service") // ì„œë¹„ìŠ¤ë¼ëŠ” ê±¸ ì•Œë ¤ì¤˜ì•¼ í•¨ -> ë¦¬ì†ŒìŠ¤ëŠ” nameìœ¼ë¡œ ì ‘ê·¼
 public class GuestServiceImpl implements GuestService {
 
 	@Resource(name="dao")
@@ -15,7 +15,7 @@ public class GuestServiceImpl implements GuestService {
 	
 	@Override
 	public void guestInsert(GuestDTO guest) {
-		dao.dao_guestInsert(guest); // Controller¿¡¼­ ¼­ºñ½º¸¦ ºÒ·¯¼­ ¿©±â·Î ¿Ô°í ÀÌÁ¦ DAOImpl·Î °¨
+		dao.dao_guestInsert(guest); // Controllerì—ì„œ ì„œë¹„ìŠ¤ë¥¼ ë¶ˆëŸ¬ì„œ ì—¬ê¸°ë¡œ ì™”ê³  ì´ì œ DAOImplë¡œ ê°
 		
 	}
 
@@ -27,7 +27,7 @@ public class GuestServiceImpl implements GuestService {
 	@Override
 	public GuestDTO findByNum(int num) {
 		// TODO Auto-generated method stub
-		return null;
+		return dao.dao_findByNum(num);
 	}
 
 	@Override
@@ -38,14 +38,13 @@ public class GuestServiceImpl implements GuestService {
 
 	@Override
 	public void guestDelete(int num) {
-		// TODO Auto-generated method stub
+		dao.dao_guestDelete(num);
 		
 	}
 
 	@Override
 	public int guestCount(HashMap<String, String> hm) {
-		// TODO Auto-generated method stub
-		return 0;
+		return dao.dao_guestCount(hm);
 	}
 
 }

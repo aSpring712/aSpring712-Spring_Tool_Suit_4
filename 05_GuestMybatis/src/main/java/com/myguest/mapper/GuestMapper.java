@@ -3,17 +3,31 @@ package com.myguest.mapper;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
 import com.myguest.model.GuestDTO;
 
 public interface GuestMapper {
-	// Ãß°¡
+	// ì¶”ê°€
 	@Insert("insert into guest(name, content, grade, created, ipaddr) "
 			+ "values(#{name}, #{content}, #{grade}, now(), #{ipaddr})")
 	public void insert(GuestDTO guest);
 	
-	@Select("select * from guest")
-	public List<GuestDTO> list(HashMap<String, String> hm); // GuestDAOImpl.javaÀÇ mapper.list¿Í ÀÌ¸§ÀÌ °°°Ô ÇØ¾ßÇÔ
+	// ì „ì²´ë³´ê¸°
+//	@Select("select * from guest")
+	public List<GuestDTO> list(HashMap<String, String> hm); // GuestDAOImpl.javaì˜ mapper.listì™€ ì´ë¦„ì´ ê°™ê²Œ í•´ì•¼í•¨
+	
+	// ê°œìˆ˜
+//	@Select("select count(*) from guest")
+	public int count(HashMap<String, String> hm);
+
+	// ìƒì„¸ë³´ê¸°
+	@Select("select * from guest where num = #{num}")
+	public GuestDTO findByNum(int num);
+	
+	// ì‚­ì œ
+	@Delete("delete from guest where num = #{num}")
+	public void delete(int num);
 }
