@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 이름 BoardMapper.java를 찾아감 -->
+<mapper namespace="com.myboard.mapper.BoardMapper">
+<sql id = "search">
+	<where>
+		<if test="word != null and field == 'writer'">
+			writer like CONCAT ('%', #{word}, '%')
+		</if>
+		<if test="word != null and field == 'content'">
+			content like CONCAT ('%', #{word}, '%')
+		</if>
+	</where>
+</sql>
+
+<!-- BoardMapper.java의 insert 처리 -->
+<insert id="insert" parameterType="com.myboard.dto.BoardDTO"> <!-- 받는 값 BoardDTO -->
+insert into board(title, writer, content, regdate)
+values(#{title}, #{writer}, #{content}, now())
+</insert>
+
+<!-- 전체보기 -->
+<select id="findAll" resultType="com.myboard.dto.BoardDTO">
+	select * from board
+	<include refid="search"/> 
+	order by num desc limit #{pageStart}, #{pageSize}
+</select>
+
+<!-- 게시글 개수 -->
+<select id="getCount" resultType="int">
+select count(*) from board
+	<include refid="search"/>
+</select>
+
+<!-- parameterType="int" 는 굳이 안적어줘도 됨, interface 자체에 매개변수가 parameterType이 되기 때문에!
+그러나 resultType은 꼭 적어주어야 함! -->
+<select id="findByNum" resultType="com.myboard.dto.BoardDTO"> 
+select * from board where num = #{num}
+</select>
+
+<delete id="delete">
+delete from board where num = #{num} 
+</delete>
+
+<update id="update">
+update board set title = #{title}, content = #{content}, regdate = now() where num = #{num}
+</update>
+
+<!-- replyCnt 1 증가 -->
+<update id="updateReplyCnt">
+update board set replycnt = replycnt + #{amount}
+where num = #{bnum}
+</update>
+
+</mapper>
