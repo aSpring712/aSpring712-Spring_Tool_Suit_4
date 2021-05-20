@@ -1,0 +1,51 @@
+<mysql paging>
+limit 시작행, 개수
+limit 10, 10       -> 10번부터 10개를 가져온다
+ex) 한 페이지에 5개씩 가져오고싶다
+limit 5, 5  -> 2번 페이지
+limit 0, 5  -> 1번 페이지
+
+오라클 sql의 경우 몇번부터 몇번까지 뽑아와서 어쩌구 저쩌구가 다 필요한데
+mysql은 조금 다름?
+
+1. queryString
+2. RESTful
+  REST (Representational State Transfer)
+  - 주소창 자체에서 값을 표현
+  - URL    /    URI의 차이
+  location     information
+
+http://lovalhost:8888/myapp05/view    -> url
+http://lovalhost:8888/myapp05/view/5 -> 5번에 대한 상세보기를 보고싶다 -> 정보 포함 : uri
+=======
+05_GuestMybatis
+1. pom.xml
+- spring 버전 5.2.7 수정
+- 자바 버전 1.8 수정
+- servlet 관련 파일 2개 수정
+- spring-jdbc 추가
+- mysql 드라이버 추가
+- mybatis 라이브러리 추가
+- mybatis-spring
+2. web.xml ==> filter 한글 인코딩
+
+04_PersonMybatis
+1. pom.xml 수정
+- spring 버전 5.2.7로 변경 +
+- 자바 버전 1.8 수정 +
+- servlet 관련 파일 2개 수정+
+- spring-jdbc 추가 +
+- mysql driver 추가 +
+
+2. web.xml -> filter 수정해서 한글 인코딩 +
+
+3. project 선택 -> Rt.버튼 -> properties
+-> project facets 수정
+
+4. 프로젝트 실행 확인
+
+5. Mybatis 라이브러리 추가
+- mybatis - spring 라이브러리 추가
+
+view --> controller --> Service --> DAO(repository) --> DB
+

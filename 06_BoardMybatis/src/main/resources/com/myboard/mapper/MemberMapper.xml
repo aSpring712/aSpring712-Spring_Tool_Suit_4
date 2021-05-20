@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 이름 MemberMapper.java를 찾아감 -->
+<mapper namespace="com.myboard.mapper.MemberMapper">
+
+<!-- 회원가입 -->
+<insert id="join">
+	insert into member(id, name, pass, addr) values(#{id}, #{name}, #{pass}, #{addr})
+</insert>
+
+<!-- id 중복 검사 -->
+<select id="idCheck" resultType="int">
+	select count(*) from member where id = #{id}
+</select>
+
+<!-- 로그인 확인 -->
+<select id="loginCheck" resultType="com.myboard.dto.MemberDTO">
+	select * from member where id = #{id}
+</select>
+
+</mapper>

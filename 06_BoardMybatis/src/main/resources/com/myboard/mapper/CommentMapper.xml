@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 이름 CommentMapper.java를 찾아감 -->
+<mapper namespace="com.myboard.mapper.CommentMapper">
+
+<!-- 댓글추가 -->
+<insert id="insert">
+insert into commentboard(userid, content, regdate, bnum)
+values(#{userid}, #{content}, now(), #{bnum})
+</insert>
+
+<!-- 댓글 리스트 -->
+<select id="getList" resultType="com.myboard.dto.CommentDTO"> <!-- id : mapper에서 정한 메서드 이름 -->
+select * from commentboard where bnum = #{bnum}
+</select>
+
+<!-- 댓글 삭제 -->
+<delete id="del">
+delete from commentboard where cnum = #{cnum}
+</delete>
+
+<!-- read : 댓글 번호 cnum을 통해 원본 게시글의 번호 bnum을 구하기 위함 -->
+<select id="read" resultType="com.myboard.dto.CommentDTO">
+select * from commentboard where cnum = #{cnum}
+</select>
+
+</mapper>
