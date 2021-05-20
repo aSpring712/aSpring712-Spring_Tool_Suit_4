@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 이름 BoardMapper.java를 찾아감 -->
+<mapper namespace="com.mysecurity.mapper.BoardMapper">
+
+<insert id="boardInsert">
+insert into board(title, writer, content, regdate)
+values(#{title}, #{writer}, #{content}, now())
+</insert>
+
+<select id="list" resultType="com.mysecurity.dto.BoardDTO">
+select * from board
+</select>
+
+<select id="view" resultType="com.mysecurity.dto.BoardDTO">
+select * from board where num = #{num}
+</select>
+
+</mapper>

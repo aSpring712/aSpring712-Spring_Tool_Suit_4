@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security https://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/> <!-- 여기에 만들어져 있는 것을 쓰겠다 -->
+<bean id="customUserDetailsService" class="com.mysecurity.domain.CustomUserDetailsService"/>
+<bean id="customLoginSuccess" class="com.mysecurity.domain.CustomLoginSuccess"/>
+
+<security:http>
+	<security:intercept-url pattern="/all" access="permitAll"/> <!-- all이라는 게 있으면 누구나 접속할 수 있도록 하겠다 -->
+	<security:intercept-url pattern="/manager" access="hasRole('ROLE_MANAGER')"/>
+	<security:form-login login-page="/customLogin"
+		authentication-success-handler-ref="customLoginSuccess"/> 
+		<!-- default 값 : login 창(우리가 만들지 않아도 login 창이 뜸), 우리는 customLogin 으로 보냄
+		로그인이 성공하면 customLoginSuccess으로 보냄 -->
+	<!-- <security:csrf disabled="true"/> --> <!-- csrf -> 위조 방지 : 누군가 자신을 사칭해서 위조하는 것 방지 -> 확인 절차! -> 매번 확인하지 않고 잠시 꺼둠(disabled="true") -->
+	<!-- 기본은 false : 로그인 시 error 발생 ->  -->
+	
+	<security:logout logout-url="/customLogout" invalidate-session="true"/> <!-- 로그아웃 성공 시 customLogout으로 이동, session을 invalidate 시키기 -->
+</security:http>
+
+<security:authentication-manager> <!-- manager -> provider를 거치고 CustomUserDetailse -> UserDetails -> User -->
+	<security:authentication-provider user-service-ref="customUserDetailsService">
+		<security:password-encoder ref="bcryptPasswordEncoder"/> <!-- 암호화시키겠다 -->
+	</security:authentication-provider>
+</security:authentication-manager>
+
+<!-- 암호화 된 유저를 찾고싶으면 security context holder에서 찾으면 됨! -->
+
+</beans>
