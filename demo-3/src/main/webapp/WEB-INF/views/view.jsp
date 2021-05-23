@@ -32,12 +32,11 @@
       <textarea class="form-control" rows="5" id="content" name="content" readonly="readonly">${board.content }</textarea>
     </div>
     
-    <c:if test="${sessionScope.sMember.id == board.writer }">
-	    <div class="form-group text-right">
+    <div class="form-group text-right">
 	    	<button type="button" class="btn btn-secondary btn-sm" id="btnUpdate">수정</button> 
 	    	<button type="button" class="btn btn-warning btn-sm" id="btnDelete">삭제</button>
-	    </div>
-    </c:if>
+	    	<button type="button" class="btn btn-primary btn-sm" onclick="location.href='/list'">글 목록 보기</button>
+    </div>
     
     <br/><br/>
     
@@ -53,7 +52,7 @@
 	var init = function() {
 		$.ajax({
 			type : "get",
-			url : "/reply/commentList",
+			url : "/reply/list",
 			data : {"bnum" : $("#num").val()}// 숫자라서 stringify없이
 		})
 		.done(function(resp) {
@@ -62,13 +61,8 @@
 			$.each(resp, function(key, val){
 				str += val.userid + " "
 				str += val.content + " "
-				str += val.regdate + " "
-				if("${sessionScope.sMember.id}" == val.userid) {
-					str += "<a href='javascript:fdel(" + val.cnum + ")'>삭제</a><br>"					
-				} else {
-					str += "<br/>"
-				}
-				
+				str += val.regdate.split("T")[0] + " "
+				str += "<a href='javascript:fdel(" + val.cnum + ")'>삭제</a><br>"					
 			})
 			$("#replyResult").html(str); // 값 뿌리기
 		})
@@ -89,7 +83,7 @@
 		}
 		$.ajax({
 			type : "post",
-			url : "/reply/commentInsert", // 댓글 관련은 전부 reply를 타고 넘어가도록
+			url : "/reply/insert/"+$("#num").val(), // 댓글 관련은 전부 reply를 타고 넘어가도록, url에 몇 번 글에 대해 insert할건지 달고 가는 경우
 			contentType : "application/json;charset=utf-8", // 형태로 넘김
 			data : JSON.stringify(data)
 		}).done(function() {
@@ -129,7 +123,7 @@
 	function fdel(cnum) {
 		$.ajax({
 			type : "delete",
-			url : "/reply/del/" + cnum
+			url : "/reply/del/" + cnum /* 매개변수로 받아옴 $ 쓰지 않음 */
 		})
 		.done(function(resp){
 			alert(resp + "번 글 삭제 완료");
@@ -138,8 +132,7 @@
 		.fail(function(e){
 			alert("댓글 삭제 실패")
 		})
-	}
-	
+	} 
 	init()
 </script>
 

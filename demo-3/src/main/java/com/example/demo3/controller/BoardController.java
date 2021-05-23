@@ -66,15 +66,15 @@ public class BoardController {
 	@GetMapping("view/{num}")
 	public String view(@PathVariable Long num, Model model) {
 		model.addAttribute("board", boardService.view(num));
-		boardService.updateHitcnt(num);
 		return "view";
 	}
 	
 	// 글 삭제
 	@DeleteMapping("delete/{num}")
-	public ResponseEntity<String> delete(@PathVariable Long num) {
+	@ResponseBody
+	public String delete(@PathVariable Long num) {
 		boardService.delete(num);
-		return new ResponseEntity<>("success", HttpStatus.OK);
+		return "success";
 	}
 	
 	// 글 수정 폼으로 이동
@@ -87,8 +87,8 @@ public class BoardController {
 	// 수정(db 값 변경)
 	@PutMapping("update")
 	@ResponseBody
-	public ResponseEntity<String> update(@RequestBody Board board) {
+	public String update(@RequestBody Board board) {
 		boardService.update(board);
-		return new ResponseEntity<>("success", HttpStatus.OK);
+		return "success";
 	}
 }

@@ -17,12 +17,12 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@Getter
-@Setter
-@Entity(name="tbl_board3")
+import lombok.Data;
+
+@Data // view에 뿌리거나 db에 값을 가져오거나 할 때 사용
+@Entity(name="tbl_board3") // Data, Entity(단순히 data mapping 용도) 같이 적는 것은 위험 -> 분리
 public class Board {
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +39,7 @@ public class Board {
 	private Long replyCnt;
 	
 	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // 얘가 여러개의 comment를 가짐, 부모 글에 변동이 생기면 다 적용되도록 설정
+	@JsonIgnoreProperties("board") // json 형태로 받아올 때 얘는 무시?
 	private List<Comment> comments; // 게시글 하나는 여러 개의 댓글을 가짐
 	
 	@PrePersist

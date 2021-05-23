@@ -1,10 +1,8 @@
 package com.example.demo3.model;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,7 +30,7 @@ public class Comment {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date regdate;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "bnum") // join된 column의 이름을 bnum이라고 함
 	private Board board; // 여러 개의 댓글이 게시글 하나에 달림 -> 이것과 tbl_board 테이블 연결
 }

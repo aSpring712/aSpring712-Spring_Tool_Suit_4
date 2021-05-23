@@ -36,11 +36,12 @@ public class BoardService {
 		return boardRepository.findAll(pageable);
 	}
 	
-	// 상세보기
+	// 상세보기 + 조회수 증가
 	@Transactional
 	public Board view(Long num) {
-		Optional<Board> board = boardRepository.findById(num); 
-		return board.get();
+		Board board = boardRepository.findById(num).get();
+		board.setHitcount(board.getHitcount()+1); // 조회수 증가
+		return board;
 	}
 	
 	// 삭제하기
@@ -49,12 +50,11 @@ public class BoardService {
 		boardRepository.deleteById(num);
 	}
 	
-	// 수정하기
-	@Transactional
+	// 수정하기 -> Dirty checking
+	@Transactional // update라는 명령어는 없음 -> Transactional -> DB에 영향 줌 : flush
 	public void update(Board board) {
-		Optional<Board> brd = boardRepository.findById(board.getNum());
-		Board b = brd.get();
-		b.setTitle(board.getTitle());
+		Board b = boardRepository.findById(board.getNum()).get(); // 1차 캐시에 저장되어있는 값 조회 -> 하나의 b 객체를 가져와서 b.set 해서 값 바꿔주기
+		b.setTitle(board.getTitle()); 
 		b.setContent(board.getContent());
 	}
 	
@@ -62,14 +62,5 @@ public class BoardService {
 	@Transactional
 	public Long count() {
 		return boardRepository.count();
-	}
-	
-	// 조회수 증가
-	@Transactional
-	public void updateHitcnt(Long num) {
-		Optional<Board> brd = boardRepository.findById(num);
-		Board b = brd.get();
-		Long cnt = b.getHitcount()+1;
-		b.setHitcount(cnt);
 	}
 }
